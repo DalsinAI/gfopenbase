@@ -1,4 +1,4 @@
-/* OpenBase core: errors, memory, text buffers, formats, notes, and
+/* GFOpenBase core: errors, memory, text buffers, formats, notes, and
  * projects (.oadb files). Portable C99; no Amiga calls.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #ifndef OB_CORE_H
@@ -6,7 +6,7 @@
 
 #include <stddef.h>
 
-#define OB_VERSION_TEXT "OpenBase core 0.1 (B1)"
+#define OB_VERSION_TEXT "GFOpenBase core 0.1 (B1)"
 
 /* A .oadb project's header (Design-OpenBase.md, 3.1) */
 #define OB_APPLICATION_ID 0x4F414442L /* "OADB" */
@@ -18,16 +18,16 @@ enum {
     OB_OK = 0,
     OB_ERR_NOMEM,       /* out of memory */
     OB_ERR_IO,          /* a file couldn't be read or written */
-    OB_ERR_NOT_PROJECT, /* not an OpenBase project */
+    OB_ERR_NOT_PROJECT, /* not a GFOpenBase project */
     OB_ERR_DAMAGED,     /* cut short or damaged */
-    OB_ERR_NEWER,       /* made by a newer OpenBase */
+    OB_ERR_NEWER,       /* made by a newer GFOpenBase */
     OB_ERR_INVALID,     /* a bad name, value or argument */
     OB_ERR_EXISTS,      /* the name or file is taken */
     OB_ERR_NOT_FOUND,   /* no such table, field, query */
     OB_ERR_RULE,        /* a field's rule or a relationship refused it */
     OB_ERR_SQL,         /* SQLite refused the SQL */
-    OB_ERR_UNSUPPORTED, /* OpenBase can't do that (yet) */
-    OB_ERR_LIMIT,       /* over one of OpenBase's limits */
+    OB_ERR_UNSUPPORTED, /* GFOpenBase can't do that (yet) */
+    OB_ERR_LIMIT,       /* over one of GFOpenBase's limits */
     OB_ERR_BUSY,        /* the project is in use */
     OB_ERR_READONLY     /* the project was opened read only */
 };
@@ -43,7 +43,7 @@ const char *ob_error_name(int code);
 
 /* ---- Memory ------------------------------------------------------------ */
 
-/* Every allocation OpenBase's core makes goes through these, so the Amiga
+/* Every allocation GFOpenBase's core makes goes through these, so the Amiga
  * program can give the core an Exec pool, and the tests can fail the n-th
  * allocation. SQLite's own memory is set apart (ob_config). */
 typedef struct ob_allocator {
@@ -183,7 +183,7 @@ struct sqlite3 *ob_project_db(ob_project *p);
 const ob_config *ob_project_config(ob_project *p);
 int ob_project_readonly(ob_project *p);
 
-/* Is this the start of an OpenBase project (Shared 2.1's owf_file_kind)?
+/* Is this the start of a GFOpenBase project (Shared 2.1's owf_file_kind)?
  * file_size < 0: unknown. 0 when it is, else an OB_ERR_ code. */
 int ob_header_check(const unsigned char *head, size_t n, long long file_size, ob_error *err);
 

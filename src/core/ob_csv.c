@@ -1,4 +1,4 @@
-/* OpenBase core: CSV import and export (RFC 4180), and the import
+/* GFOpenBase core: CSV import and export (RFC 4180), and the import
  * wizard's guess (Design-OpenBase.md, 8).
  *
  * The reader keeps one record at a time, at most max_record bytes, so a
@@ -475,7 +475,7 @@ static ob_type guess_type(const col_stats *c, ob_date_order order)
 }
 
 /* A header value made into a field name: trimmed, no control
- * characters, at most OB_NAME_MAX bytes, not one of OpenBase's own. */
+ * characters, at most OB_NAME_MAX bytes, not one of GFOpenBase's own. */
 static void field_name(const char *in, int col, char out[OB_NAME_MAX + 1])
 {
     char tmp[OB_NAME_MAX * 4 + 1];

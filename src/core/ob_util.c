@@ -1,4 +1,4 @@
-/* OpenBase core: memory, text buffers, notes, errors and UTF-8.
+/* GFOpenBase core: memory, text buffers, notes, errors and UTF-8.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "ob_internal.h"
 
@@ -173,8 +173,8 @@ void ob_report_add(ob_report *r, int level, long line, const char *fmt, ...)
 const char *ob_error_name(int code)
 {
     static const char *const names[] = {
-        "OK", "out of memory", "file error", "not an OpenBase project", "damaged",
-        "made by a newer OpenBase", "not valid", "already exists", "not found",
+        "OK", "out of memory", "file error", "not a GFOpenBase project", "damaged",
+        "made by a newer GFOpenBase", "not valid", "already exists", "not found",
         "refused by a rule", "SQL error", "not supported", "over a limit", "in use",
         "read only"
     };

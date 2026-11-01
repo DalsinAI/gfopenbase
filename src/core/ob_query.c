@@ -1,6 +1,6 @@
-/* OpenBase core: the query model and its SQL generator
+/* GFOpenBase core: the query model and its SQL generator
  * (Design-OpenBase.md, 5). Grids in, SQL out; the grid is kept as text
- * beside its SQL in oadb_queries, and only SQL OpenBase wrote is read
+ * beside its SQL in oadb_queries, and only SQL GFOpenBase wrote is read
  * back into a grid.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "ob_internal.h"
@@ -694,7 +694,7 @@ int ob_query_auto_joins(ob_project *p, ob_query *q, ob_error *err)
 
 /* ---- The grid as text ------------------------------------------------------------ */
 
-#define GRID_HEADER "OpenBase query"
+#define GRID_HEADER "GFOpenBase query"
 #define GRID_MAX (256L * 1024L)
 
 static void put_esc(ob_buf *b, const char *s)
@@ -899,7 +899,7 @@ int ob_query_from_text(const char *text, ob_query **out, ob_error *err)
     }
     if (rc) {
         ob_query_free(q);
-        if (rc == OB_ERR_NEWER) return ob_fail(err, rc, "This query was made by a newer OpenBase.");
+        if (rc == OB_ERR_NEWER) return ob_fail(err, rc, "This query was made by a newer GFOpenBase.");
         return ob_fail(err, OB_ERR_DAMAGED, "The query's grid is damaged.");
     }
     *out = q;
@@ -1053,7 +1053,7 @@ int ob_query_load(ob_project *p, const char *name, ob_query **grid, char **sql, 
             return ob_fail(err, OB_ERR_DAMAGED, "The query %s has no SQL.", name);
         }
         /* A grid is kept only with SQL it wrote (ob_query_save); a later
-         * OpenBase may write that SQL a little differently, so it isn't
+         * GFOpenBase may write that SQL a little differently, so it isn't
          * compared again here. A grid that can't be read is left out. */
         if (g && grid && ob_query_from_text(g, &q, NULL) != OB_OK) q = NULL;
         if (sql && !(*sql = ob_strdup(s))) {

@@ -1,4 +1,4 @@
-/* OpenBase core: records (ob_record.h), for the program's datasheets and
+/* GFOpenBase core: records (ob_record.h), for the program's datasheets and
  * forms. Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "ob_internal.h"
 #include "ob_record.h"

@@ -1,4 +1,4 @@
-/* OpenBase core: field types, typed text to stored values and back, and
+/* GFOpenBase core: field types, typed text to stored values and back, and
  * the conversions a change of type makes. No floating point anywhere:
  * numbers are handled as decimal text.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */

@@ -1,5 +1,5 @@
 #!/bin/sh
-# OpenBase for Cradle's stove_build (target .): Cradle checks out this repository alone and sets STOVE and OUT,
+# GFOpenBase for Cradle's stove_build (target .): Cradle checks out this repository alone and sets STOVE and OUT,
 # so this fetches what the build needs, each at the commit or checksum this repository pins, then runs
 # build-os3.sh:
 #   - SQLite's amalgamation (scripts/sqlite.lock: its URL and SHA-256), through scripts/fetch-sqlite.sh;
@@ -11,9 +11,9 @@
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 OUT=${OUT:-$HERE/build/os3}
-STOVE=${STOVE:-$HOME/AmigaChrome/stoves/os32-gcc16}
+STOVE=${STOVE:-$HOME/AmiCradle/stoves/os32-gcc16}
 DEPS=${DEPS:-$OUT/deps}
-GIT_BASE=${AMIGACHROME_GIT_BASE:-https://github.com/}
+GIT_BASE=${AMICRADLE_GIT_BASE:-https://github.com/}
 mkdir -p "$DEPS"
 
 # fetch REPO REF: DalsinAI/REPO at REF (a commit, or a branch) into $DEPS/REPO

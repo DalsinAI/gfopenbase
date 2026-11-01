@@ -1,4 +1,4 @@
-/* OpenBase host tests: criteria, the query model's text, saved queries.
+/* GFOpenBase host tests: criteria, the query model's text, saved queries.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "obtest.h"
 
@@ -158,14 +158,14 @@ static void model_text(void)
     ob_query_free(back);
     /* damaged and newer texts */
     CHECK(ob_query_from_text("", &back, &e) == OB_ERR_DAMAGED);
-    CHECK(ob_query_from_text("OpenBase query\t2\nend\n", &back, &e) == OB_ERR_NEWER);
-    CHECK(ob_query_from_text("OpenBase query\t1\n", &back, &e) == OB_ERR_DAMAGED); /* no end */
-    CHECK(ob_query_from_text("OpenBase query\t1\ncolumn\t3\tx\t\t1\tnone\tnone\ttext\nend\n", &back, &e) == OB_ERR_DAMAGED);
-    CHECK(ob_query_from_text("OpenBase query\t1\ntable\tT\t\njoin\t0\ta\t0\tb\tinner\nend\n", &back, &e) == OB_ERR_DAMAGED);
-    CHECK(ob_query_from_text("OpenBase query\t1\ntable\tT\t\ncriteria\t0\t0\tx\nend\n", &back, &e) == OB_ERR_DAMAGED);
-    CHECK(ob_query_from_text("OpenBase query\t1\nbogus\nend\n", &back, &e) == OB_ERR_DAMAGED);
-    CHECK(ob_query_from_text("OpenBase query\t1\ntable\tbad\\q\t\nend\n", &back, &e) == OB_ERR_DAMAGED);
-    CHECK(ob_query_from_text("OpenBase query\t1\nlimit\t-1\nend\n", &back, &e) == OB_ERR_DAMAGED);
+    CHECK(ob_query_from_text("GFOpenBase query\t2\nend\n", &back, &e) == OB_ERR_NEWER);
+    CHECK(ob_query_from_text("GFOpenBase query\t1\n", &back, &e) == OB_ERR_DAMAGED); /* no end */
+    CHECK(ob_query_from_text("GFOpenBase query\t1\ncolumn\t3\tx\t\t1\tnone\tnone\ttext\nend\n", &back, &e) == OB_ERR_DAMAGED);
+    CHECK(ob_query_from_text("GFOpenBase query\t1\ntable\tT\t\njoin\t0\ta\t0\tb\tinner\nend\n", &back, &e) == OB_ERR_DAMAGED);
+    CHECK(ob_query_from_text("GFOpenBase query\t1\ntable\tT\t\ncriteria\t0\t0\tx\nend\n", &back, &e) == OB_ERR_DAMAGED);
+    CHECK(ob_query_from_text("GFOpenBase query\t1\nbogus\nend\n", &back, &e) == OB_ERR_DAMAGED);
+    CHECK(ob_query_from_text("GFOpenBase query\t1\ntable\tbad\\q\t\nend\n", &back, &e) == OB_ERR_DAMAGED);
+    CHECK(ob_query_from_text("GFOpenBase query\t1\nlimit\t-1\nend\n", &back, &e) == OB_ERR_DAMAGED);
     t = malloc(300 * 1024);
     memset(t, 'a', 300 * 1024 - 1);
     t[300 * 1024 - 1] = 0;

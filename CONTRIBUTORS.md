@@ -2,11 +2,11 @@
 
 ## Creator and maintainer
 
-- **SacredTrees** ([@SacredTrees](https://github.com/SacredTrees)): created OpenBase, designs it and maintains it.
+- **SacredTrees** ([@SacredTrees](https://github.com/SacredTrees)): created GFOpenBase, designs it and maintains it.
 
 ## The AmigaChrome team
 
-We are The AmigaChrome Team, who build AmigaChrome alongside SacredTrees:
+We are The AmigaChrome Team, who build AmiCradle alongside SacredTrees:
 
 - **Agnus**, our coordinator, who keeps every thread moving.
 - **Thufir**, **Kynes** and **Galen**, who started the work on SacredTrees's x86 cores.
@@ -14,7 +14,7 @@ We are The AmigaChrome Team, who build AmigaChrome alongside SacredTrees:
 
 ## Copyright holder
 
-OpenBase's design and documents are Copyright (c) 2026 AmigaChrome Team, under
+GFOpenBase's design and documents are Copyright (c) 2026 AmigaChrome Team, under
 the MIT licence (LICENSE).
 
 Everything here is our own work.

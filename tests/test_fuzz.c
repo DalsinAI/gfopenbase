@@ -1,4 +1,4 @@
-/* OpenBase host tests: every cut-short .oadb and CSV gives an error, never
+/* GFOpenBase host tests: every cut-short .oadb and CSV gives an error, never
  * a crash; and random byte changes never crash either (Design-OpenBase.md,
  * 13, B1). Under `make check` this runs with AddressSanitizer and UBSan.
  * OB_FUZZ_ROUNDS sets the number of byte-change rounds (300 by default).
@@ -24,7 +24,7 @@ static long rounds(void)
     return n > 0 ? n : 300;
 }
 
-/* A project with something in every design table OpenBase reads */
+/* A project with something in every design table GFOpenBase reads */
 static void build_sample(const char *path)
 {
     ob_project *p = NULL;
@@ -316,7 +316,7 @@ static void csv_flips(void)
 static void grid_text(void)
 {
     static const char grid[] =
-        "OpenBase query\t1\ndistinct\t0\nlimit\t5\nformats\tDMY\t.\t,\ntable\tCustomers\t\ntable\tOrders\to\n"
+        "GFOpenBase query\t1\ndistinct\t0\nlimit\t5\nformats\tDMY\t.\t,\ntable\tCustomers\t\ntable\tOrders\to\n"
         "join\t0\tid\t1\tcustomer\tleft\ncolumn\t0\tName\t\t1\tasc\tgroup\ttext\n"
         "column\t1\tTotal\tSpent\t1\tnone\tsum\tcurrency\ncriteria\t1\t0\t> 1.50\ncriteria\t0\t1\t[Who?]\nend\n";
     long size = (long)sizeof grid - 1, len, r;

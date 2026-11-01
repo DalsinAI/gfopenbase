@@ -1,5 +1,5 @@
 /*
- * OpenBase - the GFOffice Suite's database, on AmigaOS 3.2.
+ * GFOpenBase - the GFOffice Suite's database, on AmigaOS 3.2.
  *
  * Phase B2, the program (Design-OpenBase.md, 13), on the core in src/core:
  *
@@ -10,18 +10,18 @@
  *   refuses an orphan, and a record pointed to can't be deleted);
  * - the datasheet: a table's records, a row each;
  * - the auto form: the record shown in the datasheet, a row a field
- *   (OpenGadTools' sections), changed and saved, new ones added, deleted;
+ *   (GFOpenGadTools' sections), changed and saved, new ones added, deleted;
  * - Datatype object fields: any file a datatype reads, kept in the record,
  *   a picture drawn beside the form;
  * - the relationships view: the tables as boxes, a line for each
  *   relationship.
  *
  * SQLite is the soft-float, single-thread build (build-os3.sh) with the
- * unix-none VFS (no file locks on AmigaDOS): one OpenBase on a project at
+ * unix-none VFS (no file locks on AmigaDOS): one GFOpenBase on a project at
  * a time is kept by a public Exec semaphore named after the file
  * (Design-OpenBase.md 3.2).
  *
- * Chrome: OpenGadTools' toolbar with the Chrome icon set, list, sections
+ * Chrome: GFOpenGadTools' toolbar with the Chrome icon set, list, sections
  * and status bar, in the theme (opengadtools docs/style/README.md). 68040,
  * no FPU needed.
  *
@@ -77,8 +77,8 @@
 struct Library *GadToolsBase = NULL, *AslBase = NULL, *OpenFontTextBase = NULL;
 struct Library *DataTypesBase = NULL, *CyberGfxBase = NULL;
 
-#define PROGRAM "OpenBase"
-#define VERSION_TEXT "OpenBase 0.2.0 (25.10.2026)"
+#define PROGRAM "GFOpenBase"
+#define VERSION_TEXT "GFOpenBase 0.2.0 (25.10.2026)"
 static const char version[] __attribute__((used)) =
     "$VER: " VERSION_TEXT " MIT, Copyright (c) 2026 AmigaChrome Team";
 
@@ -124,7 +124,7 @@ static struct NewMenu menus[] = {
     { NM_SUB, "Text", NULL, CHECKIT, ~4 & 7, (APTR)M_TB_TEXT },
 
     { NM_TITLE, "Help", NULL, 0, 0, NULL },
-    { NM_ITEM, "About OpenBase...", NULL, 0, 0, (APTR)M_ABOUT },
+    { NM_ITEM, "About GFOpenBase...", NULL, 0, 0, (APTR)M_ABOUT },
     { NM_END, NULL, NULL, 0, 0, NULL }
 };
 
@@ -239,7 +239,7 @@ static void load_theme(void)
 
 static void read_theme_choice(void)
 {
-    char *s = read_file("ENV:OpenGadTools/Theme");
+    char *s = read_file("ENV:GFOpenGadTools/Theme");
     if (!s) return;
     {
         char *nl = strchr(s, '\n');
@@ -251,8 +251,8 @@ static void read_theme_choice(void)
 }
 
 /* ---- Messages ----
- * EasyRequest cut its lines short on the lab's RTG screen ("Customer: 99 doesn't match a recor"; OpenCalc
- * saw the same), so OpenBase says things in a window of its own, as wide as its widest line in the font it
+ * EasyRequest cut its lines short on the lab's RTG screen ("Customer: 99 doesn't match a recor"; GFOpenCalc
+ * saw the same), so GFOpenBase says things in a window of its own, as wide as its widest line in the font it
  * draws with (up to two thirds of the screen; longer lines wrap at spaces). The buttons are numbered as
  * EasyRequest numbers them: 1, 2, ... from the left, the last 0. Return answers a lone OK, Escape the last
  * button; the main window takes no input meanwhile. */
@@ -492,7 +492,7 @@ static int ask_file(int save, const char *title, const char *initial, const char
     return ok;
 }
 
-/* ---- One OpenBase on a project at a time ----
+/* ---- One GFOpenBase on a project at a time ----
  * The unix-none VFS takes no locks, and two programs writing one SQLite file damage it: a public semaphore
  * named after the project's full path says it is open (Design-OpenBase.md 3.2). */
 
@@ -529,7 +529,7 @@ static int lock_project(const char *path)
     struct SignalSemaphore *found, *s;
     size_t i, n;
     if (!full_path(path, full, sizeof full)) snprintf(full, sizeof full, "%s", path);
-    snprintf(name, sizeof name, "OpenBase project %s", full);
+    snprintf(name, sizeof name, "GFOpenBase project %s", full);
     n = strlen(name);
     for (i = 0; i < n && name[i]; ++i) name[i] = (char)tolower((unsigned char)name[i]);
     s = AllocVec(sizeof *s + n + 1, MEMF_PUBLIC | MEMF_CLEAR);
@@ -693,7 +693,7 @@ static int read_scaled(Object *o, UBYTE *out, int sw, int sh, int tw, int th)
     return ok;
 }
 
-/* The record's object as a picture fitted into mw x mh: through T: and datatypes, as OpenWrite reads a
+/* The record's object as a picture fitted into mw x mh: through T: and datatypes, as GFOpenWrite reads a
  * picture (Design-OpenBase.md 4.3). */
 static void pic_load(int field, int mw, int mh)
 {
@@ -716,7 +716,7 @@ static void pic_load(int field, int mw, int mh)
         ob_free(data);
         return;
     }
-    snprintf(tmp, sizeof tmp, "T:OpenBase-Object-%lx.tmp", (unsigned long)FindTask(NULL));
+    snprintf(tmp, sizeof tmp, "T:GFOpenBase-Object-%lx.tmp", (unsigned long)FindTask(NULL));
     f = Open((STRPTR)tmp, MODE_NEWFILE);
     if (!f) {
         ob_free(data);
@@ -949,7 +949,7 @@ static void do_open_project(void)
     open_project(path, 0);
 }
 
-/* ---- The auto form (Design-OpenBase.md 6.1): a row a field, OpenGadTools' sections ---- */
+/* ---- The auto form (Design-OpenBase.md 6.1): a row a field, GFOpenGadTools' sections ---- */
 
 enum { FK_STRING = 1, FK_CHECK, FK_TEXT, FK_BUTTON };
 
@@ -2137,7 +2137,7 @@ static void free_area(int *l, int *t, int *w, int *h)
 {
     char buf[48];
     int a, b, c, d;
-    LONG got = GetVar((STRPTR)"OpenDock/Free", (STRPTR)buf, sizeof buf, GVF_GLOBAL_ONLY);
+    LONG got = GetVar((STRPTR)"GFOpenDock/Free", (STRPTR)buf, sizeof buf, GVF_GLOBAL_ONLY);
     if (got > 0 && sscanf(buf, "%d %d %d %d", &a, &b, &c, &d) == 4 && c >= 400 && d >= 200 && a >= 0 && b >= 0 &&
         a + c <= scr->Width && b + d <= scr->Height) {
         *l = a;

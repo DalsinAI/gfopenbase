@@ -1,4 +1,4 @@
-/* OpenBase core: field types (Design-OpenBase.md, 4.1), and turning typed
+/* GFOpenBase core: field types (Design-OpenBase.md, 4.1), and turning typed
  * text into stored values and back. No floating point: Number values stay
  * text until SQLite's REAL affinity takes them, and Currency is whole
  * pence or cents.

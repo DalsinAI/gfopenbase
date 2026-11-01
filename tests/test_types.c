@@ -1,4 +1,4 @@
-/* OpenBase host tests: field types and typed values.
+/* GFOpenBase host tests: field types and typed values.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "obtest.h"
 

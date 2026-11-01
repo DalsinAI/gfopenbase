@@ -1,13 +1,13 @@
-# OpenBase
+# GFOpenBase
 
-OpenBase is the OpenAmiga relational database and application builder: tables, relationships, visual queries, forms, reports, Datatypes, ARexx automation, and OpenPrint/OpenWrite integration in a native Amiga interface.
+GFOpenBase is the GFOpenAmiga relational database and application builder: tables, relationships, visual queries, forms, reports, Datatypes, ARexx automation, and GFOpenPrint/GFOpenWrite integration in a native Amiga interface.
 
 ## Status
 
 **Phase B2, the program, is in review; B1, the portable core, is done.** The design is
 [`docs/gfoffice/Design-OpenBase.md`](https://github.com/DalsinAI/gfoffice/blob/main/docs/gfoffice/Design-OpenBase.md)
 in DalsinAI/gfoffice (the GFOffice Suite's shared pieces are in
-`Design-Suite-Shared.md` beside it). OpenWrite's gate is met (that design,
+`Design-Suite-Shared.md` beside it). GFOpenWrite's gate is met (that design,
 section 1.1).
 
 | Phase | What | State |
@@ -17,7 +17,7 @@ section 1.1).
 | B2 | The program: object browser, table designer, datasheets, auto forms, relationships view, Datatype object fields | In review: `app/openbase.c`, checked in a lab |
 | B3, B4 | Designers and reports; ARexx and runtime mode | Not started |
 
-## Using OpenBase (B2)
+## Using GFOpenBase (B2)
 
 One window: the toolbar, the object browser (the project's tables, then
 Relationships) on the left, the table's datasheet with the record's form
@@ -25,7 +25,7 @@ under it, and the status bar.
 
 - **Project > New Project...** makes a `.oadb` file; **Open Project...**
   (Amiga-O) opens one, as does a project given on the command line or as
-  a Workbench argument (`OpenBase Work:Shop.oadb`). One OpenBase at a
+  a Workbench argument (`GFOpenBase Work:Shop.oadb`). One GFOpenBase at a
   time has a project; a second is told it is open elsewhere.
   **Check Project** runs SQLite's integrity and key checks.
 - **Table > New Table...** (Amiga-T) and **Design Table...**: the table's
@@ -47,12 +47,12 @@ under it, and the status bar.
 
 ```sh
 sh build-amiga.sh                 # Cradle's stove_build (target .): fetches the pinned pieces, then:
-OS32_GCC16=~/AmigaChrome/stoves/os32-gcc16 SQLITE_SRC=... SQLITE_PORT=... OGT=... sh build-os3.sh [OUT]
+OS32_GCC16=~/AmiCradle/stoves/os32-gcc16 SQLITE_SRC=... SQLITE_PORT=... OGT=... sh build-os3.sh [OUT]
 ```
 
 `build-amiga.sh` fetches SQLite by `scripts/sqlite.lock`, and
 DalsinAI/openamigasqlite and DalsinAI/opengadtools at the commits in
-`deps/`. OUT holds `OpenBase` and `Images/Toolbar/`: copy both into one
+`deps/`. OUT holds `GFOpenBase` and `Images/Toolbar/`: copy both into one
 drawer. A 68040 with or without an FPU (GCC 16, with
 `-fno-late-combine-instructions`).
 
@@ -88,26 +88,26 @@ and never committed here. CI (`.github/workflows/host-tests.yml`) runs both.
 
 ## Direction
 
-OpenBase is data-first rather than chrome-first:
+GFOpenBase is data-first rather than chrome-first:
 
-- compact, system-themed OpenGadTools interface
+- compact, system-themed GFOpenGadTools interface
 - hideable/resizable object browser
 - dense native controls
 - persistent status bar
-- OpenRTG used for rich design surfaces and previews
+- GFOpenRTG used for rich design surfaces and previews
 - SQLite-backed `.oadb` projects
 - visual table, relationship, query, form and report designers
 - Datatype Object fields
-- OpenWrite for rich text/document composition
-- OpenPrint for reports, labels, invoices and PDF/print output
+- GFOpenWrite for rich text/document composition
+- GFOpenPrint for reports, labels, invoices and PDF/print output
 - ARexx automation
 - application/runtime mode for finished database front ends
 
 ## Repository
 
-Related projects: `DalsinAI/gfoffice` (OpenWrite and the suite's designs),
+Related projects: `DalsinAI/gfoffice` (GFOpenWrite and the suite's designs),
 `DalsinAI/openamigasqlite` (SQLite for AmigaOS).
 
 ## Contributors
 
-OpenBase is created and maintained by [SacredTrees](https://github.com/SacredTrees) with The AmigaChrome Team, copyright AmigaChrome Team. Everyone whose work it includes is credited in [`CONTRIBUTORS.md`](CONTRIBUTORS.md).
+GFOpenBase is created and maintained by [SacredTrees](https://github.com/SacredTrees) with The AmigaChrome Team, copyright AmigaChrome Team. Everyone whose work it includes is credited in [`CONTRIBUTORS.md`](CONTRIBUTORS.md).

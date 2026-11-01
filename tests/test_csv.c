@@ -1,4 +1,4 @@
-/* OpenBase host tests: CSV reading, guessing, import, export, round trips.
+/* GFOpenBase host tests: CSV reading, guessing, import, export, round trips.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "obtest.h"
 

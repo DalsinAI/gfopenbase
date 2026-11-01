@@ -1,8 +1,8 @@
-/* OpenBase core: tables, fields, keys, indexes and relationships
+/* GFOpenBase core: tables, fields, keys, indexes and relationships
  * (Design-OpenBase.md, 4.1 and 4.2).
  *
  * A table's SQL says its types, keys, NOT NULL, defaults, CHECK rules and
- * FOREIGN KEYs; oadb_fields says what SQL can't (the OpenBase type, label,
+ * FOREIGN KEYs; oadb_fields says what SQL can't (the GFOpenBase type, label,
  * format, choices, the rule's words). A change that ALTER TABLE can't make
  * follows SQLite's own twelve steps (sqlite.org/lang_altertable.html,
  * "Making Other Kinds Of Table Schema Changes"): with foreign keys off,
@@ -42,7 +42,7 @@ int ob_name_check(const char *name, const char *what, ob_error *err)
     if (ob_is_space((unsigned char)name[0]) || ob_is_space((unsigned char)name[strlen(name) - 1]))
         return ob_fail(err, OB_ERR_INVALID, "The %s's name can't start or end with a space.", what);
     if (ob_ncasecmp(name, "oadb_", 5) == 0 || ob_ncasecmp(name, "sqlite_", 7) == 0)
-        return ob_fail(err, OB_ERR_INVALID, "Names starting \"oadb_\" or \"sqlite_\" are OpenBase's and SQLite's own.");
+        return ob_fail(err, OB_ERR_INVALID, "Names starting \"oadb_\" or \"sqlite_\" are GFOpenBase's and SQLite's own.");
     return OB_OK;
 }
 
@@ -370,7 +370,7 @@ static int default_is_literal(const char *s)
  * and quoted names (as SQLite reads them: '' "" `` doubled inside, [...])
  * its parentheses never close more than they opened and all close, and it
  * has no ';' and no comment (which could hide the closing parenthesis).
- * Then the CHECK ends where OpenBase ends it, and the statement is one. */
+ * Then the CHECK ends where GFOpenBase ends it, and the statement is one. */
 static int rule_ok(const char *s)
 {
     int depth = 0;
@@ -1604,7 +1604,7 @@ static int copy_sql(ob_project *p, ob_buf *b, const char *newname, const char *o
             for (c = 1; c <= 2; c++) {
                 char comp[OB_NAME_MAX + 16];
                 snprintf(comp, sizeof comp, "%s%s", f->name, c == 1 ? COMPANION_NAME : COMPANION_TYPE);
-                if (!column_exists(p, old, comp)) continue; /* a BLOB OpenBase didn't make */
+                if (!column_exists(p, old, comp)) continue; /* a BLOB GFOpenBase didn't make */
                 ob_buf_str(&cols, ", ");
                 add_ident(&cols, f->name, c == 1 ? COMPANION_NAME : COMPANION_TYPE);
                 ob_buf_str(&vals, ", ");
@@ -1710,9 +1710,9 @@ static int rebuild(ob_project *p, const char *table, ob_table *want, const ob_ta
     char newname[OB_NAME_MAX + 16], key_expr[4096];
     long long n_old = 0, n_new = 0;
     if (cur->without_rowid)
-        return ob_fail(err, OB_ERR_UNSUPPORTED, "%s is a WITHOUT ROWID table; OpenBase can't rebuild it.", table);
+        return ob_fail(err, OB_ERR_UNSUPPORTED, "%s is a WITHOUT ROWID table; GFOpenBase can't rebuild it.", table);
     if (cur->adopted) {
-        /* rules OpenBase didn't write would be lost */
+        /* rules GFOpenBase didn't write would be lost */
         sqlite3_stmt *st;
         int has_check = 0;
         if ((rc = ob_prepare(p, "SELECT sql FROM sqlite_schema WHERE type='table' AND name=?", &st, err))) return rc;
@@ -1725,13 +1725,13 @@ static int rebuild(ob_project *p, const char *table, ob_table *want, const ob_ta
         }
         sqlite3_finalize(st);
         if (has_check)
-            return ob_fail(err, OB_ERR_UNSUPPORTED, "%s has rules OpenBase didn't write; change it with SQL.", table);
+            return ob_fail(err, OB_ERR_UNSUPPORTED, "%s has rules GFOpenBase didn't write; change it with SQL.", table);
     }
     res->rebuilt = 1;
     if ((rc = scan_conversions(p, table, want, cur, flags, res, b, err))) return rc;
     /* the table's own triggers go with it; views and other triggers stay */
     if ((rc = save_sql(p, "type = 'trigger' AND tbl_name = ?1", table, &keep, &nkeep, err))) return rc;
-    /* indexes OpenBase can't describe (on expressions, partial) */
+    /* indexes GFOpenBase can't describe (on expressions, partial) */
     if ((rc = save_sql(p, "type = 'index' AND tbl_name = ?1", table, &extra, &nextra, err))) goto done;
     for (i = 0; i < nextra; i++) {
         int k, known = 0;
@@ -1746,7 +1746,7 @@ static int rebuild(ob_project *p, const char *table, ob_table *want, const ob_ta
         snprintf(newname, sizeof newname, i ? "ob_new_%d" : "ob_new", i);
         if (!name_taken(p, newname)) break;
         if (i > 100) {
-            rc = ob_fail(err, OB_ERR_EXISTS, "OpenBase's working names are all taken.");
+            rc = ob_fail(err, OB_ERR_EXISTS, "GFOpenBase's working names are all taken.");
             goto done;
         }
     }
@@ -1983,7 +1983,7 @@ int ob_table_change(ob_project *p, const char *name, const ob_table *design, uns
         }
     }
     if ((rc = follow_renames(want, res, err))) goto out;
-    /* a table without a key, not made by OpenBase, may stay that way */
+    /* a table without a key, not made by GFOpenBase, may stay that way */
     if (!counter_of(cur) && !cur->nkey && !counter_of(want) && !want->nkey) want->adopted = 1;
     if ((rc = validate(p, want, err))) goto out;
     if (ob_casecmp(want->name, cur->name) != 0 && name_taken(p, want->name)) {
