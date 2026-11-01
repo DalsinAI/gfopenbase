@@ -1,4 +1,4 @@
-/* OpenBase core: SQL quoting, statements, and SQLite's errors in plain words.
+/* GFOpenBase core: SQL quoting, statements, and SQLite's errors in plain words.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "ob_internal.h"
 

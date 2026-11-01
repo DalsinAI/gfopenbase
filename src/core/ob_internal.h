@@ -1,4 +1,4 @@
-/* OpenBase core: shared between the core's own files only.
+/* GFOpenBase core: shared between the core's own files only.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #ifndef OB_INTERNAL_H
 #define OB_INTERNAL_H
@@ -46,7 +46,7 @@ int ob_sql_ident_quoted(ob_buf *b, const char *name); /* always in quotes */
 
 /* The design tables */
 int ob_schema_init(ob_project *p, ob_error *err);
-/* The SQL functions OpenBase gives its connection (ob_convert...) */
+/* The SQL functions GFOpenBase gives its connection (ob_convert...) */
 int ob_types_register(ob_project *p, ob_error *err);
 /* oadb_fields, written for a table */
 int ob_fields_write(ob_project *p, const ob_table *t, ob_error *err);

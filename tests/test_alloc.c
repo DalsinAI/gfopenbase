@@ -1,4 +1,4 @@
-/* OpenBase host tests: running out of memory. The core's allocator fails
+/* GFOpenBase host tests: running out of memory. The core's allocator fails
  * the n-th allocation, for every n, through a whole session: making
  * tables, changing one, CSV in and out, a query saved and loaded. Each
  * call must give an error and leave nothing behind (LeakSanitizer checks

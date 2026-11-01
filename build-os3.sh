@@ -1,10 +1,10 @@
 #!/bin/sh
-# OpenBase for AmigaOS 3.x, 68040, no FPU needed: SQLite (soft float, one
+# GFOpenBase for AmigaOS 3.x, 68040, no FPU needed: SQLite (soft float, one
 # thread), the core and the program, with the os32-gcc16 stove.
 #
 #   build-os3.sh [OUT]          (default build/os3)
 #
-#   OS32_GCC16   the stove's root, holding prefix/ (default ~/AmigaChrome/stoves/os32-gcc16)
+#   OS32_GCC16   the stove's root, holding prefix/ (default ~/AmiCradle/stoves/os32-gcc16)
 #   SQLITE_SRC   the amalgamation's folder, as scripts/fetch-sqlite.sh unpacks it (scripts/sqlite.lock)
 #   SQLITE_PORT  a DalsinAI/openamigasqlite checkout: its AmigaDOS-names patch and compat files
 #   OGT          a DalsinAI/opengadtools checkout: lib/ (the toolbar, list, sections, status bar,
@@ -13,19 +13,19 @@
 # build-amiga.sh fetches all three at the commits deps/ names and runs this.
 # SQLite is built as openamigasqlite builds it (no WAL, no mmap, no extension
 # loading; the unix-none VFS registered by the program), with these changes
-# for OpenBase (Design-OpenBase.md, 11.2): soft float, SQLITE_THREADSAFE=0
+# for GFOpenBase (Design-OpenBase.md, 11.2): soft float, SQLITE_THREADSAFE=0
 # (one connection, one task, no libpthread) and SQLITE_OMIT_JSON.
 # MIT, Copyright (c) 2026 AmigaChrome Team.
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 OUT=${1:-$HERE/build/os3}
-S=${OS32_GCC16:-$HOME/AmigaChrome/stoves/os32-gcc16}
+S=${OS32_GCC16:-$HOME/AmiCradle/stoves/os32-gcc16}
 CC="$S/prefix/bin/m68k-amigaos-gcc"
 : "${SQLITE_SRC:?set SQLITE_SRC to the SQLite amalgamation (scripts/fetch-sqlite.sh)}"
 : "${SQLITE_PORT:?set SQLITE_PORT to an openamigasqlite checkout}"
 : "${OGT:?set OGT to an opengadtools checkout}"
 GCCV=$("$CC" -dumpversion 2>/dev/null || echo 0)
-[ "${GCCV%%.*}" -ge 16 ] 2>/dev/null || { echo "$CC is GCC $GCCV: OpenBase builds with GCC 16 (os32-gcc16)" >&2; exit 2; }
+[ "${GCCV%%.*}" -ge 16 ] 2>/dev/null || { echo "$CC is GCC $GCCV: GFOpenBase builds with GCC 16 (os32-gcc16)" >&2; exit 2; }
 SPECS="$OGT/specs/m68k-soft-m68040.specs"
 # GCC 16: -fno-late-combine-instructions (the Team's rule for GCC 16 builds)
 CPU="-noixemul -m68040 -specs=$SPECS"
@@ -59,8 +59,8 @@ done
 # shellcheck disable=SC2086
 "$CC" $CPU -O2 $SAFE $WARN $INC \
     "$HERE"/src/core/*.c "$HERE"/app/*.c $OGT_SRC "$OBJ/sqlite3.o" "$OBJ/sqlite_amiga.o" -lm -lamiga \
-    -o "$OUT/OpenBase"
-echo "$OUT/OpenBase ($(wc -c < "$OUT/OpenBase") bytes)"
+    -o "$OUT/GFOpenBase"
+echo "$OUT/GFOpenBase ($(wc -c < "$OUT/GFOpenBase") bytes)"
 # the toolbar's pictures (PROGDIR:Images/Toolbar/; made by opengadtools' tools/iconset)
 mkdir -p "$OUT/Images/Toolbar"
 cp "$HERE"/Images/Toolbar/*.ilbm "$OUT/Images/Toolbar/"

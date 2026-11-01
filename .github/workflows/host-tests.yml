@@ -1,4 +1,4 @@
-# Builds OpenBase's portable core (src/core) and runs its host tests,
+# Builds GFOpenBase's portable core (src/core) and runs its host tests,
 # `make test` and `make check` (AddressSanitizer and UBSan), on GitHub's
 # runner: once on Ubuntu's SQLite, once on the SQLite amalgamation that
 # openamigasqlite pins (scripts/sqlite.lock), fetched and checked by

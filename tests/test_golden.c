@@ -1,4 +1,4 @@
-/* OpenBase host tests: SQL golden files (Design-OpenBase.md, 5.5).
+/* GFOpenBase host tests: SQL golden files (Design-OpenBase.md, 5.5).
  * For each tests/sql/NAME.query (a grid, as oadb_queries keeps it):
  * the SQL it writes is compared with NAME.sql; then that SQL is run on
  * the fixture project (made here through the API, rows from fixture.sql),

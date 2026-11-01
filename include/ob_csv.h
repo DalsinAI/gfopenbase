@@ -1,4 +1,4 @@
-/* OpenBase core: CSV import and export (RFC 4180), with the import
+/* GFOpenBase core: CSV import and export (RFC 4180), with the import
  * wizard's settings as an API (Design-OpenBase.md, 8). Records are read
  * one at a time, so a file of any size takes the same memory.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */

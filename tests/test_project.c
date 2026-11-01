@@ -1,4 +1,4 @@
-/* OpenBase host tests: .oadb projects.
+/* GFOpenBase host tests: .oadb projects.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "obtest.h"
 
@@ -61,7 +61,7 @@ static void not_projects(void)
     CHECK(ob_project_open(text, 0, NULL, &p, &e) == OB_ERR_NOT_PROJECT && !p);
     obt_write_file(text, "SQLite fo", 9);
     CHECK(ob_project_open(text, 0, NULL, &p, &e) == OB_ERR_DAMAGED && !p);
-    /* made by a newer OpenBase */
+    /* made by a newer GFOpenBase */
     OK(ob_project_create(newer, "", NULL, &p, E));
     ob_exec(p, "PRAGMA user_version=2", &e);
     ob_project_close(p);

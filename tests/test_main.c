@@ -1,4 +1,4 @@
-/* OpenBase host tests: the runner and shared helpers.
+/* GFOpenBase host tests: the runner and shared helpers.
  *   test-openbase [suite...] [--sql DIR]
  * Suites: types project schema csv query golden fuzz alloc (all: every one).
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
@@ -138,7 +138,7 @@ int main(int argc, char **argv)
     for (i = 1; i < argc; i++)
         if (strcmp(argv[i], "--sql") == 0 && i + 1 < argc) sql_dir = argv[++i];
         else if (strcmp(argv[i], "all") == 0) all = 1;
-    printf("OpenBase core tests, SQLite %s\n", sqlite3_libversion());
+    printf("GFOpenBase core tests, SQLite %s\n", sqlite3_libversion());
 #define RUN(name, call)                                                                     \
     do {                                                                                    \
         int want = all, k;                                                                  \

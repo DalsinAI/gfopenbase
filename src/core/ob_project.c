@@ -1,4 +1,4 @@
-/* OpenBase core: .oadb projects (Design-OpenBase.md, 3).
+/* GFOpenBase core: .oadb projects (Design-OpenBase.md, 3).
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #include "ob_internal.h"
 
@@ -49,7 +49,7 @@ int ob_header_check(const unsigned char *h, size_t n, long long size, ob_error *
     if (n < 16 || memcmp(h, magic, 16) != 0) {
         if (n > 0 && n < 16 && memcmp(h, magic, n) == 0)
             return ob_fail(err, OB_ERR_DAMAGED, "The project file is cut short.");
-        return ob_fail(err, OB_ERR_NOT_PROJECT, "This isn't an OpenBase project.");
+        return ob_fail(err, OB_ERR_NOT_PROJECT, "This isn't a GFOpenBase project.");
     }
     if (n < 100) return ob_fail(err, OB_ERR_DAMAGED, "The project file is cut short.");
     page = ((unsigned long)h[16] << 8) | h[17];
@@ -58,9 +58,9 @@ int ob_header_check(const unsigned char *h, size_t n, long long size, ob_error *
         return ob_fail(err, OB_ERR_DAMAGED, "The project file is damaged (its page size).");
     if (be32(h + 68) != (unsigned long)OB_APPLICATION_ID)
         return ob_fail(err, OB_ERR_NOT_PROJECT,
-                       "This is an SQLite database, but not an OpenBase project.");
+                       "This is an SQLite database, but not a GFOpenBase project.");
     if (be32(h + 60) > OB_FORMAT_VERSION)
-        return ob_fail(err, OB_ERR_NEWER, "This project was made by a newer OpenBase.");
+        return ob_fail(err, OB_ERR_NEWER, "This project was made by a newer GFOpenBase.");
     if (size >= 0) {
         if (size < (long long)page || size % (long long)page)
             return ob_fail(err, OB_ERR_DAMAGED, "The project file is cut short.");
@@ -330,11 +330,11 @@ int ob_project_open(const char *path, unsigned flags, const ob_config *cfg, ob_p
         if ((rc = ob_sql_long(p, "PRAGMA application_id", &id, err))) goto fail;
         if ((rc = ob_sql_long(p, "PRAGMA user_version", &ver, err))) goto fail;
         if (id != OB_APPLICATION_ID) {
-            rc = ob_fail(err, OB_ERR_NOT_PROJECT, "This isn't an OpenBase project.");
+            rc = ob_fail(err, OB_ERR_NOT_PROJECT, "This isn't a GFOpenBase project.");
             goto fail;
         }
         if (ver > OB_FORMAT_VERSION) {
-            rc = ob_fail(err, OB_ERR_NEWER, "This project was made by a newer OpenBase.");
+            rc = ob_fail(err, OB_ERR_NEWER, "This project was made by a newer GFOpenBase.");
             goto fail;
         }
     }
@@ -347,7 +347,7 @@ int ob_project_open(const char *path, unsigned flags, const ob_config *cfg, ob_p
         goto fail;
     }
     if (fmt > OB_FORMAT_VERSION) {
-        rc = ob_fail(err, OB_ERR_NEWER, "This project was made by a newer OpenBase.");
+        rc = ob_fail(err, OB_ERR_NEWER, "This project was made by a newer GFOpenBase.");
         goto fail;
     }
     if ((rc = load_formats(p, err))) goto fail;
@@ -425,7 +425,7 @@ int ob_meta_set(ob_project *p, const char *key, const char *value, ob_error *err
     int rc;
     if (!key || !*key) return ob_fail(err, OB_ERR_INVALID, "The setting needs a name.");
     if (ob_casecmp(key, "format") == 0)
-        return ob_fail(err, OB_ERR_INVALID, "The format version is OpenBase's own.");
+        return ob_fail(err, OB_ERR_INVALID, "The format version is GFOpenBase's own.");
     if ((rc = ob_prepare(p, "INSERT OR REPLACE INTO oadb_meta(key, value) VALUES (?, ?)", &st, err)))
         return rc;
     sqlite3_bind_text(st, 1, key, -1, SQLITE_STATIC);

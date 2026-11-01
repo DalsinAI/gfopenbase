@@ -1,4 +1,4 @@
-/* OpenBase on a stack of its own size, as the GFOffice programs run
+/* GFOpenBase on a stack of its own size, as the GFOffice programs run
  * (gfoffice app/ow_stack.c). MIT, Copyright (c) 2026 AmigaChrome Team. */
 #include "ob_stack.h"
 #include <exec/memory.h>

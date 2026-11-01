@@ -1,4 +1,4 @@
-/* OpenBase core: tables, fields, keys, indexes and relationships
+/* GFOpenBase core: tables, fields, keys, indexes and relationships
  * (Design-OpenBase.md, 4), and changing a table the copy-and-rename way.
  * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
 #ifndef OB_SCHEMA_H
@@ -62,8 +62,8 @@ typedef struct ob_table {
     ob_index *indexes;
     int nrelations;       /* the relationships where this table is the child */
     ob_relation *relations;
-    int adopted;          /* read from a table OpenBase didn't make */
-    int without_rowid;    /* a WITHOUT ROWID table (not OpenBase's): can't be rebuilt */
+    int adopted;          /* read from a table GFOpenBase didn't make */
+    int without_rowid;    /* a WITHOUT ROWID table (not GFOpenBase's): can't be rebuilt */
 } ob_table;
 
 /* Building a design in memory */

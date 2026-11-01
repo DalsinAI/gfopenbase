@@ -1,8 +1,8 @@
-/* OpenBase core: records, for the program's datasheets and forms (phase B2,
+/* GFOpenBase core: records, for the program's datasheets and forms (phase B2,
  * Design-OpenBase.md 5.4, 6.1, 6.3 and 4.3).
  *
  * A record is found by its key: its rowid, which is the Counter of every
- * table OpenBase makes. Values go both ways as text, by their field's type:
+ * table GFOpenBase makes. Values go both ways as text, by their field's type:
  * read for showing (Currency as 1,234.50, dates in the project's order,
  * Yes/No as the project's words, a Datatype object as its file's name) and
  * written from what was typed (the same parsers as CSV import and the

@@ -1,4 +1,4 @@
-# OpenBase's portable core (src/core) and its host tests, on this computer.
+# GFOpenBase's portable core (src/core) and its host tests, on this computer.
 # The Amiga program (app/) comes in phase B2.
 #   make          build/host/libobcore.a and the test program
 #   make test     the tests
@@ -17,7 +17,7 @@ SAN = -O1 -g -fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-fr
 ifdef SQLITE_SRC
 OUT = build/host-pinned
 SQLITE_CFLAGS = -I$(SQLITE_SRC)
-# openamigasqlite's build.sh options, single-threaded as OpenBase's flavour
+# openamigasqlite's build.sh options, single-threaded as GFOpenBase's flavour
 # will be (Design-OpenBase.md, 11.2)
 SQLITE_DEFS = -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_OMIT_WAL -DSQLITE_MAX_MMAP_SIZE=0 \
 	-DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_OMIT_DEPRECATED -DSQLITE_DQS=0
@@ -49,7 +49,7 @@ $(OUT)/sqlite3.o: $(SQLITE_SRC)/sqlite3.c
 	mkdir -p $(OUT)
 	$(CC) -O2 $(SQLITE_DEFS) -c $< -o $@
 
-# SQLite itself under AddressSanitizer only; UBSan watches OpenBase's code
+# SQLite itself under AddressSanitizer only; UBSan watches GFOpenBase's code
 $(OUT)/sqlite3-asan.o: $(SQLITE_SRC)/sqlite3.c
 	mkdir -p $(OUT)
 	$(CC) -O1 -g -fsanitize=address -fno-omit-frame-pointer $(SQLITE_DEFS) -c $< -o $@

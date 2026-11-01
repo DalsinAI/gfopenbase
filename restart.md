@@ -1,10 +1,10 @@
-# Restart: OpenBase
+# Restart: GFOpenBase
 
 _Written 6 October 2026 at about 23:55 UTC, while all work is paused on @SacredTrees's word (23:28 UTC). Read this first when work resumes; the newest capsule and the live PR list win if they disagree._
 
 ## What this repo is
 
-OpenBase, the Open relational database and application builder: tables, visual queries, forms, reports, ARexx, OpenPrint and OpenWrite integration.
+GFOpenBase, the Open relational database and application builder: tables, visual queries, forms, reports, ARexx, GFOpenPrint and GFOpenWrite integration.
 
 ## Where it stands
 
