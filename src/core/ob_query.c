@@ -2,7 +2,7 @@
  * (Design-OpenBase.md, 5). Grids in, SQL out; the grid is kept as text
  * beside its SQL in oadb_queries, and only SQL GFOpenBase wrote is read
  * back into a grid.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "ob_internal.h"
 
 #include <stdio.h>

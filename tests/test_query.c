@@ -1,5 +1,5 @@
 /* GFOpenBase host tests: criteria, the query model's text, saved queries.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "obtest.h"
 
 #include <stdlib.h>

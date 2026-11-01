@@ -1,5 +1,5 @@
 /* GFOpenBase host tests: a small harness.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #ifndef OBTEST_H
 #define OBTEST_H
 

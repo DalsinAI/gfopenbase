@@ -25,7 +25,7 @@
  * and status bar, in the theme (opengadtools docs/style/README.md). 68040,
  * no FPU needed.
  *
- * MIT, Copyright (c) 2026 AmigaChrome Team.
+ * MIT, Copyright (c) 2026 AmiCradle Team.
  */
 #include <exec/types.h>
 #include <exec/memory.h>
@@ -80,7 +80,7 @@ struct Library *DataTypesBase = NULL, *CyberGfxBase = NULL;
 #define PROGRAM "GFOpenBase"
 #define VERSION_TEXT "GFOpenBase 0.2.0 (25.10.2026)"
 static const char version[] __attribute__((used)) =
-    "$VER: " VERSION_TEXT " MIT, Copyright (c) 2026 AmigaChrome Team";
+    "$VER: " VERSION_TEXT " MIT, Copyright (c) 2026 AmiCradle Team";
 
 enum { C_OPEN = 1, C_NEWTABLE, C_RELATIONS, C_NEWREC, C_SAVEREC, C_DELREC, C_PICTURE };
 enum { GID_TOOLBAR = 100, GID_BROWSER = 200, GID_SHEET = 201, GID_FORM = 1000, GID_FORMBTN = 2000 };
@@ -1974,7 +1974,7 @@ static void about(void)
     char text[400];
     snprintf(text, sizeof text,
              VERSION_TEXT "\nThe GFOffice Suite's database.\n\nTables, records, relationships and Datatype objects\n"
-             "in one .oadb project (an SQLite file).\n\n%s, SQLite %s.\nMIT, Copyright (c) 2026 AmigaChrome Team.",
+             "in one .oadb project (an SQLite file).\n\n%s, SQLite %s.\nMIT, Copyright (c) 2026 AmiCradle Team.",
              OB_VERSION_TEXT, sqlite3_libversion());
     tell("About " PROGRAM, text);
 }

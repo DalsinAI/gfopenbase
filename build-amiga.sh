@@ -7,7 +7,7 @@
 #   - DalsinAI/opengadtools at deps/opengadtools.ref: the toolbar, list, sections, status bar and theme,
 #     and the soft-float specs.
 # A local build can run build-os3.sh itself with OS32_GCC16, SQLITE_SRC, SQLITE_PORT and OGT set.
-# MIT, Copyright (c) 2026 AmigaChrome Team (Team 5, 25 October 2026).
+# MIT, Copyright (c) 2026 AmiCradle Team (Team 5, 25 October 2026).
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 OUT=${OUT:-$HERE/build/os3}

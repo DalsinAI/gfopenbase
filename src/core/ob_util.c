@@ -1,5 +1,5 @@
 /* GFOpenBase core: memory, text buffers, notes, errors and UTF-8.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "ob_internal.h"
 
 #include <stdarg.h>

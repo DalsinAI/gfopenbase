@@ -1,5 +1,5 @@
 /* GFOpenBase core: shared between the core's own files only.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #ifndef OB_INTERNAL_H
 #define OB_INTERNAL_H
 

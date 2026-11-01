@@ -4,7 +4,7 @@
 # openamigasqlite pins (scripts/sqlite.lock), fetched and checked by
 # SHA-256 at build time and never committed. There is no Amiga code to
 # build yet (the program comes in phase B2).
-# MIT, Copyright (c) 2026 AmigaChrome Team.
+# MIT, Copyright (c) 2026 AmiCradle Team.
 name: Host tests
 on:
   pull_request:

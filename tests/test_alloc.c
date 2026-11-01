@@ -3,7 +3,7 @@
  * tables, changing one, CSV in and out, a query saved and loaded. Each
  * call must give an error and leave nothing behind (LeakSanitizer checks
  * that under `make check`). SQLite's own memory isn't failed here.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "obtest.h"
 
 #include <stdlib.h>

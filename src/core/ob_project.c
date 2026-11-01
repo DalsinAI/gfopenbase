@@ -1,5 +1,5 @@
 /* GFOpenBase core: .oadb projects (Design-OpenBase.md, 3).
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "ob_internal.h"
 
 #include <stdio.h>
