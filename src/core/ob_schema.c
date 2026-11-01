@@ -411,7 +411,9 @@ static int rule_ok(const char *s)
 }
 
 /* OB_ERR_INVALID (and nothing in b) when the field's rule isn't one expression */
-static int field_sql(ob_buf *b, const ob_field *f)
+/* The field's own column; with_companions adds a Datatype object's _name
+ * and _type columns after it, as CREATE TABLE lists them */
+static int field_sql_part(ob_buf *b, const ob_field *f, int with_companions)
 {
     const char *n = f->name;
     if (f->rule && *f->rule && !rule_ok(f->rule)) return OB_ERR_INVALID;
@@ -499,7 +501,7 @@ static int field_sql(ob_buf *b, const ob_field *f)
         ob_buf_str(b, f->rule);
         ob_buf_char(b, ')');
     }
-    if (f->type == OB_TYPE_OBJECT) {
+    if (f->type == OB_TYPE_OBJECT && with_companions) {
         ob_buf_str(b, ",\n  ");
         add_ident(b, n, COMPANION_NAME);
         ob_buf_str(b, " TEXT,\n  ");
@@ -507,6 +509,11 @@ static int field_sql(ob_buf *b, const ob_field *f)
         ob_buf_str(b, " TEXT");
     }
     return b->failed;
+}
+
+static int field_sql(ob_buf *b, const ob_field *f)
+{
+    return field_sql_part(b, f, 1);
 }
 
 int ob_table_create_sql(const ob_table *t, const char *as_name, ob_buf *b, ob_error *err)
@@ -1875,7 +1882,8 @@ static int add_columns(ob_project *p, const char *table, const ob_table *want, o
         ob_buf col;
         if (f->was) continue;
         ob_buf_init(&col, 0);
-        if (field_sql(&col, f) == OB_ERR_INVALID) {
+        /* the column alone: its check and rule can have commas in them */
+        if (field_sql_part(&col, f, 0) == OB_ERR_INVALID) {
             ob_buf_free(&col);
             return ob_fail(err, OB_ERR_INVALID,
                            "The rule for %s isn't one expression: check its brackets and quotes, and leave out ';' and comments.",
@@ -1887,7 +1895,7 @@ static int add_columns(ob_project *p, const char *table, const ob_table *want, o
             ob_buf_str(b, "ALTER TABLE ");
             ob_sql_ident_quoted(b, table);
             ob_buf_str(b, " ADD COLUMN ");
-            ob_buf_add(b, ob_buf_text(&col), strcspn(ob_buf_text(&col), ","));
+            ob_buf_str(b, ob_buf_text(&col));
             ob_buf_str(b, "; ALTER TABLE ");
             ob_sql_ident_quoted(b, table);
             ob_buf_str(b, " ADD COLUMN ");
