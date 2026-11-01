@@ -228,6 +228,69 @@ static void bad_designs(ob_project *p)
     ob_table_free(t);
 }
 
+/* A field's rule goes into CHECK (...) as it is (a project file can carry
+ * any text there): one that would end the CHECK early, add a statement or
+ * hide the rest in a comment is refused, and runs nothing */
+static void rule_injection(ob_project *p)
+{
+    static const char *bad[] = {
+        "1); ATTACH ':memory:' AS evil; CREATE TABLE evil.t(a",
+        "1) , evil INTEGER CHECK (1",
+        "x > 0)",
+        "(x > 0",
+        "x > 0; DROP TABLE Stock",
+        "x > 0 -- )",
+        "x > 0 /* ) */",
+        "x > 'a",
+        "x > \"a",
+    };
+    static const char *good[] = {
+        "x > 0 AND x < 10",
+        "x IN ('a)', 'b;', 'c--', '/*')",
+        "length(\"x\") < 5 AND x <> 'it''s'",
+        "[x] > 0 AND `x` < 99",
+    };
+    ob_error e;
+    ob_table *t;
+    unsigned i;
+    for (i = 0; i < sizeof bad / sizeof bad[0]; i++) {
+        t = ob_table_new("Ruled", 1, &e);
+        ob_table_add_field(t, "x", OB_TYPE_TEXT, &e);
+        ob_strset(&ob_table_field(t, "x")->rule, bad[i], &e);
+        CHECK(ob_table_create(p, t, &e) == OB_ERR_INVALID);
+        CHECK(obt_long(p, "SELECT count(*) FROM pragma_database_list WHERE name = 'evil'") == 0);
+        CHECK(obt_long(p, "SELECT count(*) FROM sqlite_schema WHERE name = 'Ruled'") == 0);
+        ob_table_free(t);
+    }
+    /* adding a field with a bad rule to a table that is there */
+    t = ob_table_new("Ruled", 1, &e);
+    ob_table_add_field(t, "x", OB_TYPE_TEXT, &e);
+    OK(ob_table_create(p, t, E));
+    ob_table_free(t);
+    OK(ob_table_read(p, "Ruled", &t, E));
+    ob_strset(&ob_table_add_field(t, "y", OB_TYPE_INTEGER, &e)->rule, bad[0], &e);
+    CHECK(ob_table_change(p, "Ruled", t, 0, NULL, &e) == OB_ERR_INVALID);
+    CHECK(obt_long(p, "SELECT count(*) FROM pragma_database_list WHERE name = 'evil'") == 0);
+    ob_table_free(t);
+    /* a rebuild (a type change) with a bad rule */
+    OK(ob_table_read(p, "Ruled", &t, E));
+    ob_table_field(t, "x")->type = OB_TYPE_INTEGER;
+    ob_strset(&ob_table_field(t, "x")->rule, bad[0], &e);
+    CHECK(ob_table_change(p, "Ruled", t, 0, NULL, &e) == OB_ERR_INVALID);
+    CHECK(obt_long(p, "SELECT count(*) FROM pragma_database_list WHERE name = 'evil'") == 0);
+    ob_table_free(t);
+    OK(ob_table_drop(p, "Ruled", E));
+    /* rules with brackets, quotes and ';' inside strings still work */
+    for (i = 0; i < sizeof good / sizeof good[0]; i++) {
+        t = ob_table_new("Ruled", 1, &e);
+        ob_table_add_field(t, "x", OB_TYPE_TEXT, &e);
+        ob_strset(&ob_table_field(t, "x")->rule, good[i], &e);
+        OK(ob_table_create(p, t, E));
+        ob_table_free(t);
+        OK(ob_table_drop(p, "Ruled", E));
+    }
+}
+
 /* Change Stock to `t`; it must keep ROWS rows */
 static int change(ob_project *p, ob_table *t, unsigned flags, ob_change_result *res)
 {
@@ -615,6 +678,7 @@ void suite_schema(void)
     ob_project *p = obt_memory_project();
     types_and_words(p);
     bad_designs(p);
+    rule_injection(p);
     changes_keep_rows(p);
     keys_change(p);
     relationships(p);

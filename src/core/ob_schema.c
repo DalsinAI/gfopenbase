@@ -365,9 +365,56 @@ static int default_is_literal(const char *s)
     return 1;
 }
 
+/* A field's rule goes into "CHECK (rule)" as it is, and a project file can
+ * carry any text there, so it must be one expression: outside its strings
+ * and quoted names (as SQLite reads them: '' "" `` doubled inside, [...])
+ * its parentheses never close more than they opened and all close, and it
+ * has no ';' and no comment (which could hide the closing parenthesis).
+ * Then the CHECK ends where OpenBase ends it, and the statement is one. */
+static int rule_ok(const char *s)
+{
+    int depth = 0;
+    for (; *s; s++) {
+        switch (*s) {
+        case '\'':
+        case '"':
+        case '`':
+        case '[': {
+            char q = *s == '[' ? ']' : *s;
+            for (;;) {
+                if (!*++s) return 0; /* never closed */
+                if (*s != q) continue;
+                if (q != ']' && s[1] == q) s++; /* a doubled quote */
+                else break;
+            }
+            break;
+        }
+        case '(':
+            depth++;
+            break;
+        case ')':
+            if (--depth < 0) return 0;
+            break;
+        case ';':
+            return 0;
+        case '-':
+            if (s[1] == '-') return 0;
+            break;
+        case '/':
+            if (s[1] == '*') return 0;
+            break;
+        default:
+            break;
+        }
+    }
+    return depth == 0;
+}
+
+/* OB_ERR_INVALID (and nothing in b) when the field's rule isn't one expression */
 static int field_sql(ob_buf *b, const ob_field *f)
 {
     const char *n = f->name;
+    if (f->rule && *f->rule && !rule_ok(f->rule)) return OB_ERR_INVALID;
     ob_sql_ident_quoted(b, n);
     ob_buf_char(b, ' ');
     ob_buf_str(b, ob_type_sql(f->type));
@@ -471,7 +518,12 @@ int ob_table_create_sql(const ob_table *t, const char *as_name, ob_buf *b, ob_er
     ob_buf_str(b, " (\n  ");
     for (i = 0; i < t->nfields; i++) {
         if (i) ob_buf_str(b, ",\n  ");
-        if (field_sql(b, &t->fields[i]) == OB_ERR_NOMEM) return ob_nomem(err);
+        int rc = field_sql(b, &t->fields[i]);
+        if (rc == OB_ERR_INVALID)
+            return ob_fail(err, OB_ERR_INVALID,
+                           "The rule for %s isn't one expression: check its brackets and quotes, and leave out ';' and comments.",
+                           t->fields[i].name);
+        if (rc == OB_ERR_NOMEM) return ob_nomem(err);
     }
     if (t->nkey > 0) {
         ob_buf_str(b, ",\n  PRIMARY KEY (");
@@ -1823,7 +1875,12 @@ static int add_columns(ob_project *p, const char *table, const ob_table *want, o
         ob_buf col;
         if (f->was) continue;
         ob_buf_init(&col, 0);
-        field_sql(&col, f);
+        if (field_sql(&col, f) == OB_ERR_INVALID) {
+            ob_buf_free(&col);
+            return ob_fail(err, OB_ERR_INVALID,
+                           "The rule for %s isn't one expression: check its brackets and quotes, and leave out ';' and comments.",
+                           f->name);
+        }
         ob_buf_reset(b);
         if (f->type == OB_TYPE_OBJECT) {
             /* three columns, one ALTER each */
