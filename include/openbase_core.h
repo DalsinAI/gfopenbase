@@ -1,7 +1,7 @@
 /* GFOpenBase's portable core: projects, field types, tables and
  * relationships, CSV, and the query model with its SQL generator (phase
  * B1); records and Datatype objects for the program (B2).
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #ifndef OPENBASE_CORE_H
 #define OPENBASE_CORE_H
 

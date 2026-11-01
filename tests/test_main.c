@@ -1,7 +1,7 @@
 /* GFOpenBase host tests: the runner and shared helpers.
  *   test-openbase [suite...] [--sql DIR]
  * Suites: types project schema csv query golden fuzz alloc (all: every one).
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #define _POSIX_C_SOURCE 200809L
 #include "obtest.h"
 

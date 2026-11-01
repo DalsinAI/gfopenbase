@@ -6,7 +6,7 @@
  * lenient where files in the wild need it: LF or CR line ends as well as
  * CR LF, a quote inside an unquoted value kept as it is, spaces after a
  * closing quote skipped, a UTF-8 byte order mark skipped.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "ob_internal.h"
 
 #include <stdio.h>

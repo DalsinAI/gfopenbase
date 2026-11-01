@@ -9,7 +9,7 @@
  * in one transaction, make the new table, copy the rows, drop the old,
  * rename the new, put back indexes, triggers and views, check the foreign
  * keys, commit.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "ob_internal.h"
 
 #include <stdio.h>

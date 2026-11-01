@@ -1,6 +1,6 @@
 /* GFOpenBase host tests: records and Datatype objects (ob_record.h), as the
  * program's datasheets and forms use them (phase B2).
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "obtest.h"
 
 #include <stdlib.h>

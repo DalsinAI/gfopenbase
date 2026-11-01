@@ -1,6 +1,6 @@
 /* GFOpenBase core: tables, fields, keys, indexes and relationships
  * (Design-OpenBase.md, 4), and changing a table the copy-and-rename way.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #ifndef OB_SCHEMA_H
 #define OB_SCHEMA_H
 

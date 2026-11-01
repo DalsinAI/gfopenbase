@@ -9,7 +9,7 @@
  * query grid). SQLite's refusals come back in plain words ("Price must be a
  * number.", a relationship's "...doesn't match a record in Customers.").
  *
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #ifndef OB_RECORD_H
 #define OB_RECORD_H
 

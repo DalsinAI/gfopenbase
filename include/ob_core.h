@@ -1,6 +1,6 @@
 /* GFOpenBase core: errors, memory, text buffers, formats, notes, and
  * projects (.oadb files). Portable C99; no Amiga calls.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #ifndef OB_CORE_H
 #define OB_CORE_H
 

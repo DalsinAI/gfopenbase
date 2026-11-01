@@ -4,7 +4,7 @@
  * the fixture project (made here through the API, rows from fixture.sql),
  * with NAME.args as its answers if there is one, and the rows are
  * compared with NAME.rows. OB_GOLDEN_UPDATE=1 rewrites .sql and .rows.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #define _POSIX_C_SOURCE 200809L
 #include "obtest.h"
 

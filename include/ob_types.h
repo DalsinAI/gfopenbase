@@ -2,7 +2,7 @@
  * text into stored values and back. No floating point: Number values stay
  * text until SQLite's REAL affinity takes them, and Currency is whole
  * pence or cents.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #ifndef OB_TYPES_H
 #define OB_TYPES_H
 

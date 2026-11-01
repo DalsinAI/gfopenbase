@@ -2,7 +2,7 @@
  * a crash; and random byte changes never crash either (Design-OpenBase.md,
  * 13, B1). Under `make check` this runs with AddressSanitizer and UBSan.
  * OB_FUZZ_ROUNDS sets the number of byte-change rounds (300 by default).
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "obtest.h"
 
 #include <stdlib.h>

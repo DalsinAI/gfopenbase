@@ -2,7 +2,7 @@
 # Fetches the SQLite amalgamation pinned in scripts/sqlite.lock, checks its
 # SHA-256 and unpacks it into DIR. Then:
 #   make check SQLITE_SRC=DIR/sqlite-amalgamation-3530400
-# Copyright (c) 2026 AmigaChrome Team. MIT licence.
+# Copyright (c) 2026 AmiCradle Team. MIT licence.
 set -eu
 dir=${1:?usage: fetch-sqlite.sh DIR}
 lock=$(dirname "$0")/sqlite.lock

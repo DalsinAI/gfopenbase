@@ -1,5 +1,5 @@
 /* GFOpenBase host tests: CSV reading, guessing, import, export, round trips.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #include "obtest.h"
 
 #include <sqlite3.h>

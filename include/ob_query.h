@@ -1,7 +1,7 @@
 /* GFOpenBase core: the query model and its SQL generator
  * (Design-OpenBase.md, 5). The designer edits an ob_query; the generator
  * writes SQL from it; the grid is kept beside its SQL in oadb_queries.
- * Copyright (c) 2026 AmigaChrome Team. MIT licence. */
+ * Copyright (c) 2026 AmiCradle Team. MIT licence. */
 #ifndef OB_QUERY_H
 #define OB_QUERY_H
 

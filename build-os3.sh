@@ -15,7 +15,7 @@
 # loading; the unix-none VFS registered by the program), with these changes
 # for GFOpenBase (Design-OpenBase.md, 11.2): soft float, SQLITE_THREADSAFE=0
 # (one connection, one task, no libpthread) and SQLITE_OMIT_JSON.
-# MIT, Copyright (c) 2026 AmigaChrome Team.
+# MIT, Copyright (c) 2026 AmiCradle Team.
 set -eu
 HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 OUT=${1:-$HERE/build/os3}
