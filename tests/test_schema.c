@@ -359,6 +359,29 @@ static void changes_keep_rows(ob_project *p)
     ob_table_free(t);
     free(before);
 
+    /* 3b. a Datatype object ALTER can add, whose rule has commas in it: the
+     * whole column goes in (its check and rule), then its two companions */
+    OK(ob_table_read(p, "Stock", &t, E));
+    {
+        ob_field *f = ob_table_add_field(t, "Scan", OB_TYPE_OBJECT, &e);
+        ob_strset(&f->rule, "length(Scan) BETWEEN 0 AND max(1, 4096)", &e);
+        ob_strset(&f->rule_text, "Scan, at most 4 KB", &e);
+    }
+    CHECK(change(p, t, 0, &res) == OB_OK && !res.rebuilt && res.rows == ROWS);
+    ob_table_free(t);
+    CHECK(obt_long(p, "SELECT count(*) FROM pragma_table_info('Stock') WHERE name IN ('Scan', 'Scan_name', 'Scan_type')") == 3);
+    CHECK(obt_long(p, "SELECT count(*) FROM Stock WHERE Scan IS NULL AND Scan_name IS NULL AND Scan_type IS NULL") == ROWS);
+    CHECK(exec_words(p, "UPDATE Stock SET Scan = 'text' WHERE id = 1", "Scan must be a Datatype object."));
+    CHECK(exec_words(p, "UPDATE Stock SET Scan = zeroblob(5000) WHERE id = 1", "Scan, at most 4 KB"));
+    CHECK(ob_exec(p, "UPDATE Stock SET Scan = zeroblob(10), Scan_name = 'a.iff', Scan_type = 'ilbm' WHERE id = 1", &e) == OB_OK);
+    OK(ob_table_read(p, "Stock", &t, E));
+    CHECK(t && ob_table_field(t, "Scan") && ob_table_field(t, "Scan")->type == OB_TYPE_OBJECT && !ob_table_field(t, "Scan_name"));
+    /* and it goes again, so the later steps see the table they expect */
+    ob_table_remove_field(t, "Scan", &e);
+    CHECK(change(p, t, 0, &res) == OB_OK && res.rows == ROWS);
+    ob_table_free(t);
+    CHECK(obt_long(p, "SELECT count(*) FROM pragma_table_info('Stock') WHERE name LIKE 'Scan%'") == 0);
+
     /* 4. a field goes: copied and renamed; views and triggers come back */
     before = obt_rows(p, "SELECT id, Code, Quantity, Weight, Price, Added, At, Updated, Active, Colour, Photo, Photo_name,"
                          " Photo_type, Size, Supplier, Reorder FROM Stock ORDER BY id");
