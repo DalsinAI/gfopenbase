@@ -1,7 +1,7 @@
 # Builds GFOpenBase's portable core (src/core) and runs its host tests,
 # `make test` and `make check` (AddressSanitizer and UBSan), on GitHub's
 # runner: once on Ubuntu's SQLite, once on the SQLite amalgamation that
-# openamigasqlite pins (scripts/sqlite.lock), fetched and checked by
+# gfopensqlite pins (scripts/sqlite.lock), fetched and checked by
 # SHA-256 at build time and never committed. There is no Amiga code to
 # build yet (the program comes in phase B2).
 # MIT, Copyright (c) 2026 AmiCradle Team.
@@ -35,7 +35,7 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
-      - name: Fetch openamigasqlite's SQLite
+      - name: Fetch gfopensqlite's SQLite
         run: scripts/fetch-sqlite.sh third_party/sqlite
       - name: make test
         run: make test SQLITE_SRC=third_party/sqlite/sqlite-amalgamation-3530400

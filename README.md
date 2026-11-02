@@ -51,7 +51,7 @@ OS32_GCC16=~/AmiCradle/stoves/os32-gcc16 SQLITE_SRC=... SQLITE_PORT=... OGT=... 
 ```
 
 `build-amiga.sh` fetches SQLite by `scripts/sqlite.lock`, and
-DalsinAI/openamigasqlite and DalsinAI/opengadtools at the commits in
+DalsinAI/gfopensqlite and DalsinAI/gfopengadtools at the commits in
 `deps/`. OUT holds `GFOpenBase` and `Images/Toolbar/`: copy both into one
 drawer. A 68040 with or without an FPU (GCC 16, with
 `-fno-late-combine-instructions`).
@@ -67,7 +67,7 @@ make check    # the same under AddressSanitizer and UBSan
 ```
 
 They use the computer's own SQLite (`pkg-config sqlite3`). To use the
-SQLite openamigasqlite pins, with its build options, instead:
+SQLite gfopensqlite pins, with its build options, instead:
 
 ```sh
 scripts/fetch-sqlite.sh third_party/sqlite
@@ -83,8 +83,8 @@ and never committed here. CI (`.github/workflows/host-tests.yml`) runs both.
 | `src/core/` | Projects (`ob_project.c`), field types (`ob_types.c`), tables and relationships (`ob_schema.c`), CSV (`ob_csv.c`), queries (`ob_query.c`) |
 | `tests/` | The host tests; `tests/sql/` holds the query generator's golden files |
 | `app/` | The Amiga program: `openbase.c`, its stack (`ob_stack.c`) and the last drawer (`lastdir.h`) |
-| `Images/Toolbar/` | The Chrome toolbar pictures (opengadtools' `tools/iconset`) |
-| `deps/` | The openamigasqlite and opengadtools commits the Amiga build fetches |
+| `Images/Toolbar/` | The Chrome toolbar pictures (gfopengadtools' `tools/iconset`) |
+| `deps/` | The gfopensqlite and gfopengadtools commits the Amiga build fetches |
 
 ## Direction
 
@@ -106,7 +106,7 @@ GFOpenBase is data-first rather than chrome-first:
 ## Repository
 
 Related projects: `DalsinAI/gfoffice` (GFOpenWrite and the suite's designs),
-`DalsinAI/openamigasqlite` (SQLite for AmigaOS).
+`DalsinAI/gfopensqlite` (SQLite for AmigaOS).
 
 ## Contributors
 

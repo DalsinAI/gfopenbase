@@ -1,4 +1,4 @@
-# The SQLite the host tests can build against: the one openamigasqlite pins
+# The SQLite the host tests can build against: the one gfopensqlite pins
 # (its SOURCES file), so the tests and the Amiga build use the same code.
 # Fetched at build time by scripts/fetch-sqlite.sh; never committed here.
 version=3.53.4
