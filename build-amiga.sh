@@ -3,8 +3,8 @@
 # so this fetches what the build needs, each at the commit or checksum this repository pins, then runs
 # build-os3.sh:
 #   - SQLite's amalgamation (scripts/sqlite.lock: its URL and SHA-256), through scripts/fetch-sqlite.sh;
-#   - DalsinAI/openamigasqlite at deps/openamigasqlite.ref: its AmigaDOS-names patch and compat files;
-#   - DalsinAI/opengadtools at deps/opengadtools.ref: the toolbar, list, sections, status bar and theme,
+#   - DalsinAI/gfopensqlite at deps/gfopensqlite.ref: its AmigaDOS-names patch and compat files;
+#   - DalsinAI/gfopengadtools at deps/gfopengadtools.ref: the toolbar, list, sections, status bar and theme,
 #     and the soft-float specs.
 # A local build can run build-os3.sh itself with OS32_GCC16, SQLITE_SRC, SQLITE_PORT and OGT set.
 # MIT, Copyright (c) 2026 AmiCradle Team (Team 5, 25 October 2026).
@@ -28,10 +28,10 @@ fetch() {
 }
 ref() { head -n 1 "$HERE/deps/$1.ref" | tr -d '[:space:]'; }
 
-fetch openamigasqlite "$(ref openamigasqlite)"
-fetch opengadtools "$(ref opengadtools)"
+fetch gfopensqlite "$(ref gfopensqlite)"
+fetch gfopengadtools "$(ref gfopengadtools)"
 SQLITE_SRC=$(sh "$HERE/scripts/fetch-sqlite.sh" "$DEPS/sqlite" | tail -n 1)
 echo "build-amiga.sh: SQLite from $SQLITE_SRC"
-OS32_GCC16=$STOVE SQLITE_SRC=$SQLITE_SRC SQLITE_PORT="$DEPS/openamigasqlite" OGT="$DEPS/opengadtools" \
+OS32_GCC16=$STOVE SQLITE_SRC=$SQLITE_SRC SQLITE_PORT="$DEPS/gfopensqlite" OGT="$DEPS/gfopengadtools" \
     sh "$HERE/build-os3.sh" "$OUT"
 rm -rf "$DEPS"   # the job's out/ keeps the program, not the sources

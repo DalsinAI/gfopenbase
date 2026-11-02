@@ -22,7 +22,7 @@
  * (Design-OpenBase.md 3.2).
  *
  * Chrome: GFOpenGadTools' toolbar with the Chrome icon set, list, sections
- * and status bar, in the theme (opengadtools docs/style/README.md). 68040,
+ * and status bar, in the theme (gfopengadtools docs/style/README.md). 68040,
  * no FPU needed.
  *
  * MIT, Copyright (c) 2026 AmiCradle Team.

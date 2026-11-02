@@ -5,7 +5,7 @@
 #   make check    the tests under AddressSanitizer and UBSan
 #
 # SQLite: the host's libsqlite3 (pkg-config sqlite3) by default. To build
-# against the amalgamation openamigasqlite pins instead, with its options
+# against the amalgamation gfopensqlite pins instead, with its options
 # (never committed here):
 #   scripts/fetch-sqlite.sh third_party/sqlite
 #   make check SQLITE_SRC=third_party/sqlite/sqlite-amalgamation-3530400
@@ -17,7 +17,7 @@ SAN = -O1 -g -fsanitize=address,undefined -fno-sanitize-recover=all -fno-omit-fr
 ifdef SQLITE_SRC
 OUT = build/host-pinned
 SQLITE_CFLAGS = -I$(SQLITE_SRC)
-# openamigasqlite's build.sh options, single-threaded as GFOpenBase's flavour
+# gfopensqlite's build.sh options, single-threaded as GFOpenBase's flavour
 # will be (Design-OpenBase.md, 11.2)
 SQLITE_DEFS = -DSQLITE_THREADSAFE=0 -DSQLITE_OMIT_LOAD_EXTENSION -DSQLITE_OMIT_WAL -DSQLITE_MAX_MMAP_SIZE=0 \
 	-DSQLITE_DEFAULT_MEMSTATUS=0 -DSQLITE_OMIT_DEPRECATED -DSQLITE_DQS=0

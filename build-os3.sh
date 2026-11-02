@@ -6,12 +6,12 @@
 #
 #   OS32_GCC16   the stove's root, holding prefix/ (default ~/AmiCradle/stoves/os32-gcc16)
 #   SQLITE_SRC   the amalgamation's folder, as scripts/fetch-sqlite.sh unpacks it (scripts/sqlite.lock)
-#   SQLITE_PORT  a DalsinAI/openamigasqlite checkout: its AmigaDOS-names patch and compat files
-#   OGT          a DalsinAI/opengadtools checkout: lib/ (the toolbar, list, sections, status bar,
+#   SQLITE_PORT  a DalsinAI/gfopensqlite checkout: its AmigaDOS-names patch and compat files
+#   OGT          a DalsinAI/gfopengadtools checkout: lib/ (the toolbar, list, sections, status bar,
 #                theme) and specs/m68k-soft-m68040.specs
 #
 # build-amiga.sh fetches all three at the commits deps/ names and runs this.
-# SQLite is built as openamigasqlite builds it (no WAL, no mmap, no extension
+# SQLite is built as gfopensqlite builds it (no WAL, no mmap, no extension
 # loading; the unix-none VFS registered by the program), with these changes
 # for GFOpenBase (Design-OpenBase.md, 11.2): soft float, SQLITE_THREADSAFE=0
 # (one connection, one task, no libpthread) and SQLITE_OMIT_JSON.
@@ -22,8 +22,8 @@ OUT=${1:-$HERE/build/os3}
 S=${OS32_GCC16:-$HOME/AmiCradle/stoves/os32-gcc16}
 CC="$S/prefix/bin/m68k-amigaos-gcc"
 : "${SQLITE_SRC:?set SQLITE_SRC to the SQLite amalgamation (scripts/fetch-sqlite.sh)}"
-: "${SQLITE_PORT:?set SQLITE_PORT to an openamigasqlite checkout}"
-: "${OGT:?set OGT to an opengadtools checkout}"
+: "${SQLITE_PORT:?set SQLITE_PORT to a gfopensqlite checkout}"
+: "${OGT:?set OGT to a gfopengadtools checkout}"
 GCCV=$("$CC" -dumpversion 2>/dev/null || echo 0)
 [ "${GCCV%%.*}" -ge 16 ] 2>/dev/null || { echo "$CC is GCC $GCCV: GFOpenBase builds with GCC 16 (os32-gcc16)" >&2; exit 2; }
 SPECS="$OGT/specs/m68k-soft-m68040.specs"
@@ -33,7 +33,7 @@ SAFE="-fno-late-combine-instructions -fno-tree-loop-distribute-patterns -fno-del
 OBJ="$OUT/obj"
 mkdir -p "$OBJ"
 
-# SQLite: the amalgamation with openamigasqlite's patch (AmigaDOS names kept as given)
+# SQLite: the amalgamation with gfopensqlite's patch (AmigaDOS names kept as given)
 rm -rf "$OBJ/sqlite"
 mkdir -p "$OBJ/sqlite"
 cp "$SQLITE_SRC/sqlite3.c" "$SQLITE_SRC/sqlite3.h" "$OBJ/sqlite/"
@@ -61,7 +61,7 @@ done
     "$HERE"/src/core/*.c "$HERE"/app/*.c $OGT_SRC "$OBJ/sqlite3.o" "$OBJ/sqlite_amiga.o" -lm -lamiga \
     -o "$OUT/GFOpenBase"
 echo "$OUT/GFOpenBase ($(wc -c < "$OUT/GFOpenBase") bytes)"
-# the toolbar's pictures (PROGDIR:Images/Toolbar/; made by opengadtools' tools/iconset)
+# the toolbar's pictures (PROGDIR:Images/Toolbar/; made by gfopengadtools' tools/iconset)
 mkdir -p "$OUT/Images/Toolbar"
 cp "$HERE"/Images/Toolbar/*.ilbm "$OUT/Images/Toolbar/"
 rm -rf "$OBJ"
