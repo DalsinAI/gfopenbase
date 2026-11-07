@@ -64,4 +64,7 @@ echo "$OUT/GFOpenBase ($(wc -c < "$OUT/GFOpenBase") bytes)"
 # the toolbar's pictures (PROGDIR:Images/Toolbar/; made by gfopengadtools' tools/iconset)
 mkdir -p "$OUT/Images/Toolbar"
 cp "$HERE"/Images/Toolbar/*.ilbm "$OUT/Images/Toolbar/"
+# the ARexx example (README: ARexx)
+mkdir -p "$OUT/Rexx"
+cp "$HERE"/Rexx/*.rexx "$OUT/Rexx/"
 rm -rf "$OBJ"

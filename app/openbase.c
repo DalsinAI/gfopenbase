@@ -60,6 +60,7 @@
 #include <ctype.h>
 #include <clib/alib_protos.h>
 #include <sqlite3.h>
+#include "arexx/apphost.h"
 
 #include "openbase_core.h"
 #include "ob_stack.h"
@@ -2210,6 +2211,298 @@ static void close_window(void)
     if (scr) { UnlockPubScreen(NULL, scr); scr = NULL; }
 }
 
+/* ---- The ARexx port (Design-OpenBase.md 9): GFOPENBASE.1, on arexx.class through the SDK's
+ * arexx/apphost.h. Its commands never ask: a record that can't be saved gives RC 10, not a requester. */
+
+static ah_host *rexx;
+
+static int rx_need_table(ah_call *c)
+{
+    if (proj && cur) return 1;
+    ah_error(c, 10, 0);
+    return 0;
+}
+
+/* the record in the form saved before a command leaves it */
+static int rx_commit(ah_call *c)
+{
+    if (commit_record() == OB_OK) return 1;
+    ah_error(c, 10, 0);
+    return 0;
+}
+
+static int rx_field(ah_call *c, const char *name)
+{
+    int i;
+    for (i = 0; cur && i < cur->nfields; ++i)
+        if (!strcmp(cur->fields[i].name, name)) return i;
+    ah_error(c, 10, ERROR_OBJECT_NOT_FOUND);
+    return -1;
+}
+
+static void rx_open(ah_call *c)
+{
+    char path[512];
+    BPTR l;
+    if (!rx_commit(c)) return;
+    if (!(l = Lock((STRPTR)ah_str(c, 0), ACCESS_READ))) {
+        ah_error(c, 10, IoErr());
+        return;
+    }
+    UnLock(l);
+    if (!full_path(ah_str(c, 0), path, sizeof path)) {
+        ah_error(c, 10, IoErr());
+        return;
+    }
+    open_project(path, 0);
+    if (!proj) ah_error(c, 10, 0);
+}
+
+static void rx_close(ah_call *c)
+{
+    if (!rx_commit(c)) return;
+    close_project();
+    update_window_title();
+    relayout();
+}
+
+static void rx_getfile(ah_call *c)
+{
+    ah_result(c, "%s", proj_path);
+}
+
+static void rx_tables(ah_call *c)
+{
+    int i;
+    size_t n = 0;
+    char *r = c->host->result;
+    r[0] = 0;
+    for (i = 0; i < ntables; ++i)
+        n += snprintf(r + n, n < AH_RESULT_MAX ? AH_RESULT_MAX - n : 0, "%s\"%s\"", i ? " " : "", tables[i]);
+    c->cmd->ac_Result = (STRPTR)r;
+}
+
+static void rx_table(ah_call *c)
+{
+    int i;
+    if (!proj) {
+        ah_error(c, 10, 0);
+        return;
+    }
+    if ((i = table_index(ah_str(c, 0))) < 0) {
+        ah_error(c, 10, ERROR_OBJECT_NOT_FOUND);
+        return;
+    }
+    if (i == sel) return;
+    if (!rx_commit(c)) return;
+    show_object(i);
+    relayout();
+}
+
+static void rx_gettable(ah_call *c)
+{
+    ah_result(c, "%s", cur ? cur->name : "");
+}
+
+static void rx_records(ah_call *c)
+{
+    if (rx_need_table(c)) ah_result(c, "%d", nkeys);
+}
+
+static void rx_getrow(ah_call *c)
+{
+    if (rx_need_table(c)) ah_result(c, "%d", row + 1);
+}
+
+static void rx_goto(ah_call *c)
+{
+    LONG n = ah_num(c, 0, 0);
+    if (!rx_need_table(c)) return;
+    if (n < 1 || n > nkeys) {
+        ah_error(c, 10, 0);
+        return;
+    }
+    if (n - 1 == row || !rx_commit(c)) return;
+    row = (int)n - 1;
+    reform();
+}
+
+static void rx_newrecord(ah_call *c)
+{
+    if (!rx_need_table(c) || !rx_commit(c)) return;
+    row = -1;
+    reform();
+}
+
+static void rx_saverecord(ah_call *c)
+{
+    if (!rx_need_table(c) || !rx_commit(c)) return;
+    reform();
+    ah_result(c, "%d", row + 1);
+}
+
+static void rx_deleterecord(ah_call *c)
+{
+    ob_error e;
+    if (!rx_need_table(c)) return;
+    if (row < 0) {
+        ah_error(c, 5, 0);
+        return;
+    }
+    if (ob_record_delete(proj, cur->name, keys[row], &e) != OB_OK) {
+        set_status(e.text);
+        draw_status();
+        ah_error(c, 10, 0);
+        return;
+    }
+    cache_forget(keys[row]);
+    free_texts_of_record();
+    load_keys();
+    if (row >= nkeys) row = nkeys - 1;
+    set_status("Record deleted.");
+    reform();
+}
+
+static void rx_getfield(ah_call *c)
+{
+    int f;
+    if (!rx_need_table(c) || (f = rx_field(c, ah_str(c, 0))) < 0) return;
+    read_form();
+    ah_result(c, "%s", typed && typed[f] ? typed[f] : "");
+}
+
+static void rx_setfield(ah_call *c)
+{
+    int f;
+    char *t;
+    if (!rx_need_table(c) || (f = rx_field(c, ah_str(c, 0))) < 0) return;
+    if (!typed || !form_editable(&cur->fields[f])) {
+        ah_error(c, 10, 0);
+        return;
+    }
+    if (!(t = dup_text(ah_str(c, 1)))) {
+        ah_error(c, 20, ERROR_NO_FREE_STORE);
+        return;
+    }
+    free_form();                                 /* what was typed in the other fields kept */
+    free(typed[f]);
+    typed[f] = t;
+    build_form();
+    draw_form();
+}
+
+/* SQL with ? bound to ARGS, as text; NULL after a reply when it can't be made */
+static sqlite3_stmt *rx_sql(ah_call *c)
+{
+    sqlite3_stmt *st = NULL;
+    const char **a = ah_multi(c, 1);
+    int i;
+    if (!proj) {
+        ah_error(c, 10, 0);
+        return NULL;
+    }
+    if (sqlite3_prepare_v2(ob_project_db(proj), ah_str(c, 0), -1, &st, NULL) != SQLITE_OK || !st) {
+        set_status(sqlite3_errmsg(ob_project_db(proj)));
+        draw_status();
+        if (st) sqlite3_finalize(st);
+        ah_error(c, 10, 0);
+        return NULL;
+    }
+    for (i = 0; a[i]; ++i) sqlite3_bind_text(st, i + 1, a[i], -1, SQLITE_TRANSIENT);
+    return st;
+}
+
+/* the first row's first value; RC 5 with no row */
+static void rx_query(ah_call *c)
+{
+    sqlite3_stmt *st = rx_sql(c);
+    int r;
+    if (!st) return;
+    r = sqlite3_step(st);
+    if (r == SQLITE_ROW) {
+        const unsigned char *v = sqlite3_column_text(st, 0);
+        ah_result(c, "%s", v ? (const char *)v : "");
+    } else if (r == SQLITE_DONE) {
+        ah_error(c, 5, 0);
+    } else {
+        set_status(sqlite3_errmsg(ob_project_db(proj)));
+        draw_status();
+        ah_error(c, 10, 0);
+    }
+    sqlite3_finalize(st);
+}
+
+/* SQL that changes the project; RESULT the rows changed, RC 5 on a project opened read-only */
+static void rx_exec(ah_call *c)
+{
+    sqlite3_stmt *st;
+    int r;
+    if (proj && ob_project_readonly(proj)) {
+        ah_error(c, 5, 0);
+        return;
+    }
+    if (!rx_commit(c) || !(st = rx_sql(c))) return;
+    while ((r = sqlite3_step(st)) == SQLITE_ROW) {}
+    sqlite3_finalize(st);
+    if (r != SQLITE_DONE) {
+        set_status(sqlite3_errmsg(ob_project_db(proj)));
+        draw_status();
+        ah_error(c, 10, 0);
+        return;
+    }
+    ah_result(c, "%d", sqlite3_changes(ob_project_db(proj)));
+    /* the tables and the record again, as the SQL left them */
+    {
+        char name[128] = "";
+        if (cur) snprintf(name, sizeof name, "%s", cur->name);
+        cache_clear();
+        load_tables();
+        show_object(name[0] && table_index(name) >= 0 ? table_index(name) : ntables ? 0 : -1);
+        relayout();
+    }
+}
+
+static const ah_cmd rexx_cmds[] = {
+    { "OPEN", "FILE/A", rx_open },
+    { "CLOSE", "", rx_close },
+    { "GETFILE", "", rx_getfile },
+    { "TABLES", "", rx_tables },
+    { "TABLE", "NAME/A", rx_table },
+    { "GETTABLE", "", rx_gettable },
+    { "RECORDS", "", rx_records },
+    { "GETROW", "", rx_getrow },
+    { "GOTO", "ROW/N/A", rx_goto },
+    { "NEWRECORD", "", rx_newrecord },
+    { "SAVERECORD", "", rx_saverecord },
+    { "DELETERECORD", "", rx_deleterecord },
+    { "GETFIELD", "NAME/A", rx_getfield },
+    { "SETFIELD", "NAME/A,VALUE/A", rx_setfield },
+    { "QUERY", "SQL/A,ARGS/M", rx_query },
+    { "EXEC", "SQL/A,ARGS/M", rx_exec },
+    { NULL, NULL, NULL }
+};
+
+/* QUIT saves the record first; QUIT FORCE leaves what can't be saved */
+static int rx_quit_hook(void *user, int force)
+{
+    (void)user;
+    if (!force && commit_record() != OB_OK) return 0;
+    quit_now = 1;
+    return 1;
+}
+
+static void rx_front_hook(void *user)
+{
+    (void)user;
+    if (win) {
+        if (win->WScreen) ScreenToFront(win->WScreen);
+        WindowToFront(win);
+        ActivateWindow(win);
+    }
+}
+
+static const ah_hooks rexx_hooks = { VERSION_TEXT, rx_quit_hook, rx_front_hook, NULL, NULL };
+
 static int window_main(int argc, char **argv)
 {
     int rc = 0;
@@ -2237,13 +2530,17 @@ static int window_main(int argc, char **argv)
         goto out;
     }
     if (first[0]) open_project(first, 0);
+    rexx = ah_open("GFOPENBASE", rexx_cmds, &rexx_hooks);   /* none without arexx.class: the program goes on */
     while (!quit_now) {
         ULONG sig = 1UL << win->UserPort->mp_SigBit;
-        ULONG got = Wait(sig | SIGBREAKF_CTRL_C);
+        ULONG got = Wait(sig | ah_sigmask(rexx) | SIGBREAKF_CTRL_C);
         if ((got & SIGBREAKF_CTRL_C) && leave_record()) quit_now = 1;
         if (got & sig) events();
+        if (got & ah_sigmask(rexx)) ah_handle(rexx);
     }
 out:
+    ah_close(rexx);
+    rexx = NULL;
     close_project();
     close_window();
     if (theme.text) ogt_theme_free(&theme);

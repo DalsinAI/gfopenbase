@@ -42,6 +42,18 @@ under it, and the status bar.
   sentence naming the field.
 - **Load Picture...** (Amiga-L) keeps any file a datatype reads in the
   record (a picture is drawn beside the form); Clear Picture takes it out.
+- **ARexx**: the port is `GFOPENBASE.1` (`.2` for a second copy).
+  Commands: `OPEN FILE/A`, `CLOSE`, `GETFILE`, `TABLES` (the names, each
+  in double quotes), `TABLE NAME/A`, `GETTABLE`, `RECORDS`, `GETROW`,
+  `GOTO ROW/N/A` (from 1), `NEWRECORD`, `SAVERECORD`, `DELETERECORD` (no
+  question asked), `GETFIELD NAME/A`, `SETFIELD NAME/A,VALUE/A` (then
+  `SAVERECORD`), `QUERY SQL/A,ARGS/M` (the first row's first value; `?`
+  takes ARGS in turn; RC 5 for no row), `EXEC SQL/A,ARGS/M` (the rows
+  changed; RC 5 on a read-only project), and the ones every Open app has:
+  `QUIT FORCE/S` (saves the record first; FORCE leaves what can't be
+  saved), `ACTIVATE`, `VERSION`, `HELP COMMAND`, `FAULT CODE/N/A`. RESULT
+  comes back with `OPTIONS RESULTS`; RC 10 when a command can't be done.
+  `Rexx/Records.rexx` is an example.
 
 ## Building for the Amiga
 
